@@ -1,4 +1,5 @@
 // TIENDA DE BEBIDAS            
+const d = document;
 
 let carrito = [];
 
@@ -75,13 +76,7 @@ const comprarBebidas = () => {
         
     } while (continuarCompra);
 
-    alert(`Compra finalizada! A continuacion la lista de productos que se lleva:`)
-
-    carrito.forEach((productosCarrito) => {
-        alert(`
-        Producto: ${productosCarrito.bebida}, ${productosCarrito.cantidad} unidades, $${productosCarrito.precio * productosCarrito.cantidad}
-        `);
-    })
+    alert(`Compra finalizada!`);
 
     return total = carrito.reduce((acumulador, productosCarrito) => acumulador + (productosCarrito.precio * productosCarrito.cantidad), 0)
 
@@ -119,7 +114,49 @@ const finalizarCompra = (total) => {
     } else {
         alert('¡Nos vemos!');
     }
+
+    return total
 }
 
 
-finalizarCompra(precioEnvio(comprarBebidas()));
+const iniciarApp = () => {
+
+    const button = d.querySelector('.btn-danger');
+    button.addEventListener('click', () => {
+        renderizarCarrito(finalizarCompra(precioEnvio(comprarBebidas())));
+        ;
+    })
+}
+
+const renderizarCarrito = (totalImp) => {
+
+    const carritoImpreso = d.querySelector('#carrito');
+    carritoImpreso.innerHTML = `<h2 class="text-center m-3 background-Grey">¡Productos comprados!</h2>`;
+
+    let container = d.createElement('div');
+    container.classList.add('conjuntoProductos','background-fullGrey');
+    carritoImpreso.appendChild(container);
+
+    carrito.forEach((producto) => {
+
+        let div = d.createElement('div');
+        div.classList.add('background-Grey');
+
+        div.innerHTML = `
+            <ul class="productoCarrito">
+                <li class="textWhite background-Grey">Producto: ${producto.bebida}</li>
+                <li class="textWhite background-Grey">Precio por unidad: $${producto.precio}</li>
+                <li class="textWhite background-Grey">Cantidad: ${producto.cantidad}</li>
+            </ul>`;
+
+        container.appendChild(div);
+    });
+
+    let div = d.createElement('div');
+    div.classList.add('totalCarrito');
+    div.innerHTML = `<p class="background-fullGrey ps-4 pt-3">Total: $${totalImp}</p>`;
+
+    carritoImpreso.appendChild(div);
+}
+
+iniciarApp();

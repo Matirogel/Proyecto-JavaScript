@@ -4,14 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" 
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <title>Tienda de bebidas</title>
 </head>
 <body>
     <main>
-        <h1>TIENDA DE BEBIDAS</h1>
-        <p>Aqui encontrarás toda la variedad que estabas buscando</p>
+        <div class="container">
+            <div class=" text-center m-5">
+                <h1>TIENDA DE BEBIDAS</h1>
+                <p>Aqui encontrarás toda la variedad que estabas buscando</p>
+                <button type="button" class="btn btn-danger m-5">COMENZAR</button>
+            </div>
+            <div class="container d-flex justify-content-center">
+                <div class="col-10 col-md-8 col-lg-6 col-xl-5 background-Grey textWhite" id="carrito">
+                    
+                </div>
+            </div>
+        </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <script src="js/stock.js"></script>
     <script src="js/codigo.js"></script>
 </body>
