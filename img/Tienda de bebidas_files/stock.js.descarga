@@ -1,4 +1,4 @@
-const BBDD = 
+const bebidas = 
 [
     {
         id: 1, 
@@ -42,6 +42,6 @@ const BBDD =
     }
 ];   
 
-export { BBDD };
+export { bebidas };
 
 

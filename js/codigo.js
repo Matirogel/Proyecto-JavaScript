@@ -1,162 +1,202 @@
-// TIENDA DE BEBIDAS            
-const d = document;
+import { BBDD } from "./stock.js";
+import { multiplicar } from "./operaciones.js";
+import { enviarCarritoStorage, obtenerCarritoStorage } from "./localStorage.js";
 
-let carrito = [];
 
-const pedirBebida = () => {
 
-    let listaDeBebidas = bebidas.map((bebida) =>  bebida.nombre + "   $" + bebida.precio);
-    alert("Lista de productos:\n\n" + listaDeBebidas.join("\n"));        
+const carrito = [];
 
-    let bebida = prompt('Ingrese el nombre del producto a comprar:\n 1. Fernet\n 2. Gancia\n 3. Gin\n 4. Licor\n 5. Whisky\n 6. Salir').toLowerCase();
 
-    while (!( bebida == "fernet" || bebida == "gancia" || bebida == "gin"
-           || bebida == "licor" || bebida == "whisky" || bebida == "salir")) {
-        alert('¡ERROR! Escoge un producto de la lista')
-        bebida = prompt('Ingrese el nombre del producto a comprar:\n 1. Fernet\n 2. Gancia\n 3. Gin\n 4. Licor\n 5. Whisky\n 6. Salir').toLowerCase();
-    }
+// Funcion a ejecutar
+const pintarBebidas = () => {
 
-    return bebida;
-}
+    const contenedor = document.getElementById('tienda-container');
 
-const pedirCantidad = () => {
+    // Recorremos el array y pintamos cada objeto dentro
 
-    let cantidad = Number(prompt('Ingrese la cantidad del producto escogido:'));
-
-    while (isNaN(cantidad) || (cantidad == "")) {
-        alert('¡ERROR! Escoge un número');
-        cantidad = Number(prompt('Ingrese la cantidad del producto escogido:'));
-    }
-
-    return cantidad;
-}
-
-const comprarBebidas = () => {
-
-    let total = 0;
-    let continuarCompra = false;
-
-    do {
-        let precio;
-        let cantidad;
-        let bebida = pedirBebida();
+    BBDD.forEach((prod) => {
         
-        switch (bebida) {
-            case "fernet":
-                cantidad = pedirCantidad();
-                precio = bebidas[0].precio;
-                carrito.push( {bebida, cantidad, precio});
-                break;
-            case "gancia":
-                cantidad = pedirCantidad();
-                precio = bebidas[1].precio;
-                carrito.push( {bebida, cantidad, precio});
-                break;
-            case "gin":
-                cantidad = pedirCantidad();
-                precio = bebidas[2].precio;
-                carrito.push( {bebida, cantidad, precio});
-                break;
-            case "licor":
-                cantidad = pedirCantidad();
-                precio = bebidas[3].precio;
-                carrito.push( {bebida, cantidad, precio});
-                break;
-            case "whisky":
-                cantidad = pedirCantidad();
-                precio = bebidas[4].precio;
-                carrito.push( {bebida, cantidad, precio});
-                break;
-            case "salir":
-                subtotal = 0;
-                break;
-        }
-        console.log(carrito);    
-        continuarCompra = confirm('¿Desea seguir comprando productos?')
+        const div = document.createElement('div');
+        div.classList.add('col-lg-3', 'col-sm-6', 'mb-5', 'd-flex', 'justify-content-center');
+        div.innerHTML = ` 
+                        <div class="card background-pink borderRed" style="width: 18rem;">
+                            <img src="${prod.img}" class="card-img-top p-4" alt="${prod.textAlt}">
+                            <div id="card-body" class="card-body d-flex flex-column justify-content-around p-1 cardBorder backgroundCard">
+                                <h5 class="card-title m-3 fs-4">${prod.nombre}</h5>
+                                <div class="container d-flex justify-content-around align-items-center">
+                                    <div class="flex-grow-5 text-start">
+                                        <p class="mb-1">Volumen: <b>${prod.volumen}</b></p>
+                                        <p class="mb-2">Precio: <b>$${prod.precio}</b></p>
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <button id="cantidad-mas${prod.id}" class="btn-cantidad cantidad-shadow" type="button">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <div id="cantidad${prod.id}">
+                                        <span>1</span>
+                                        </div>
+                                        <button id="cantidad-menos${prod.id}" class="btn-cantidad cantidad-shadow" type="button">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>  
+                                <a id="btn-agregar${prod.id}" class="btn btn-danger m-2">Añadir al carrito</a>
+                            </div>
+                        </div>
+                        `;       
+        contenedor.appendChild(div);
+
+
+        let botonAgregar = document.getElementById(`btn-agregar${prod.id}`);
+
+        botonAgregar.addEventListener('click', () => {
+            bebidasEnCarrito(prod.id);
+        })
+
+        cantidadBebida(prod.id);    
+    })
+};
+
+
+
+const bebidasEnCarrito = (idBebida) => {
+
+    // Funcionalidad de carga del carrito
+
+    let producto = BBDD.find(bebida => bebida.id === idBebida);
+    let productoEnCarrito = carrito.find(producto => producto.id === idBebida);
+
+    // Validamos para que no se repita el producto en el carrito
+
+    if (productoEnCarrito != producto) {
+        carrito.push(producto);
+        pintarCarrito(carrito);   
+        calcularTotal(carrito);     
+    } else {
+        alert('¡Ya has agregado este producto!\n\nSi quieres mas unidades debes quitar el producto del CARRITO y volver a añadirlo con la cantidad correcta');
+    }
+
+    enviarCarritoStorage();
+}
+
+
+
+const pintarCarrito = (carrito) => {
+
+    // Renderizacion del carrito de compras
+
+    const container = document.getElementById(`modal-container`);
+    
+    container.innerText = '';
+
+    carrito.forEach((prod, index) => {
+
+        const div = document.createElement('div');
+        div.classList.add("producto-modal", "pt-2", "flex-row", "justify-content-between","background-pink");
+        div.innerHTML = 
+        `
+        <div>
+            <p class="m-0">Producto: ${prod.nombre}</p>
+            <p class="m-0">Precio unidad: ${prod.precio}</p>
+            <p class="m-0">Cantidad: ${prod.cantidad}</p>
+            <button id="eliminar-bebida" class="mt-3 ms-3" type="button">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+        <div>
+            <div class="background-pink" style="width: 80px;">
+                <img src="${prod.img}" class="card-img-top " alt="${prod.textAlt}">
+            </div>        
+        </div>
+        `;
         
-    } while (continuarCompra);
+        div.querySelector('button').addEventListener('click', () => {
+            eliminarBebidaCarrito(index);
+        })
 
-    alert(`Compra finalizada!`);
-
-    return total = carrito.reduce((acumulador, productosCarrito) => acumulador + (productosCarrito.precio * productosCarrito.cantidad), 0)
-
+        container.appendChild(div);
+    })
+    
 }
 
 
-const precioEnvio = (total) => {
 
-    if (total >= 6000) {
-        let envioPrecio = confirm('¡Tienes envio gratis! ¿Quieres hacer uso del mismo?');
-        if (envioPrecio) {
-            alert('¡Gracias por su compra!');
-        } else {
-            alert('¡Gracias por su compra!\nPuedes retirarlo por la sucursal entre las 10:00 y las 20:00');
+const eliminarBebidaCarrito = (idCarrito) => {
+
+    carrito.splice(idCarrito,1);
+    pintarCarrito(carrito);
+    calcularTotal(carrito);
+
+    alert('El producto fue eliminado del carrito');
+
+    enviarCarritoStorage();
+
+}
+    
+
+
+const cantidadBebida = (idBebida) => {
+
+    // Funcionalidad de la eleccion de cantidades
+
+    const producto = BBDD.find(bebida => bebida.id === idBebida);
+    const botonMas = document.getElementById(`cantidad-mas${idBebida}`);
+    const botonMenos = document.getElementById(`cantidad-menos${idBebida}`);
+
+    botonMas.addEventListener('click', () => {
+        producto.cantidad++;
+        pintarCantidad(producto.id);
+    })
+    botonMenos.addEventListener('click', () => {
+        if (producto.cantidad > 1) {
+            producto.cantidad--;
+            pintarCantidad(producto.id);
         }
-    } else if (total == 0) {
-        alert('Gracias por su visita');
-    } else {
-        let envioPrecio = confirm('¡El costo de envío es de $500! ¿Quieres hacer uso del mismo?');
-        if (envioPrecio) {
-            total = total + 500;
-            alert('¡Gracias por su compra!');
-        } else {
-            alert('¡Gracias por su compra!\nPuedes retirarlo por la sucursal entre las 10:00 y las 20:00');
-        }
-    }
-    return total;
-}
-
-
-const finalizarCompra = (total) => {
-
-    if (total != 0) {
-        alert(`El total de su compra es de: $${total}`);
-    } else {
-        alert('¡Nos vemos!');
-    }
-
-    return total
-}
-
-
-const iniciarApp = () => {
-
-    const button = d.querySelector('.btn-danger');
-    button.addEventListener('click', () => {
-        renderizarCarrito(finalizarCompra(precioEnvio(comprarBebidas())));
-        ;
     })
 }
 
-const renderizarCarrito = (totalImp) => {
 
-    const carritoImpreso = d.querySelector('#carrito');
-    carritoImpreso.innerHTML = `<h2 class="text-center m-3 background-Grey">¡Productos comprados!</h2>`;
 
-    let container = d.createElement('div');
-    container.classList.add('conjuntoProductos','background-fullGrey');
-    carritoImpreso.appendChild(container);
+const pintarCantidad = (idBebida) => {
 
-    carrito.forEach((producto) => {
+    // Renderizacion de la eleccion de cantidades en las cards
 
-        let div = d.createElement('div');
-        div.classList.add('background-Grey');
-
-        div.innerHTML = `
-            <ul class="productoCarrito">
-                <li class="textWhite background-Grey">Producto: ${producto.bebida}</li>
-                <li class="textWhite background-Grey">Precio por unidad: $${producto.precio}</li>
-                <li class="textWhite background-Grey">Cantidad: ${producto.cantidad}</li>
-            </ul>`;
-
-        container.appendChild(div);
-    });
-
-    let div = d.createElement('div');
-    div.classList.add('totalCarrito');
-    div.innerHTML = `<p class="background-fullGrey ps-4 pt-3">Total: $${totalImp}</p>`;
-
-    carritoImpreso.appendChild(div);
+    const producto = BBDD.find(bebida => bebida.id === idBebida);
+    const div = document.getElementById(`cantidad${idBebida}`);
+    div.innerHTML = `<span>${producto.cantidad}</span>`;
 }
 
-iniciarApp();
+
+
+const calcularTotal = (carrito) => {
+
+    let total = 0;
+    let container = document.getElementById('total-print');
+    container.innerHTML = '';
+
+    carrito.forEach((prod) => {
+        total += (prod.precio * prod.cantidad);
+    })
+    
+    const p = document.createElement('p');
+    p.innerHTML = `<p>$${total}</p>`;
+
+    container.appendChild(p);
+}
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    pintarBebidas();
+    if (localStorage.getItem('carrito')) {
+        const carritoStorage = obtenerCarritoStorage();
+        pintarCarrito(carritoStorage);
+        calcularTotal(carritoStorage);
+    }
+})
+
+
+
+export {carrito}
+
