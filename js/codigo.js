@@ -4,7 +4,7 @@ import { enviarCarritoStorage, obtenerCarritoStorage } from "./localStorage.js";
 
 
 
-const carrito = [];
+let carrito = obtenerCarritoStorage() || [];
 
 
 // Funcion a ejecutar
@@ -65,6 +65,7 @@ const bebidasEnCarrito = (idBebida) => {
 
     let producto = BBDD.find(bebida => bebida.id === idBebida);
     let productoEnCarrito = carrito.find(producto => producto.id === idBebida);
+    console.log(productoEnCarrito)
 
     // Validamos para que no se repita el producto en el carrito
 
@@ -76,7 +77,7 @@ const bebidasEnCarrito = (idBebida) => {
         alert('¡Ya has agregado este producto!\n\nSi quieres mas unidades debes quitar el producto del CARRITO y volver a añadirlo con la cantidad correcta');
     }
 
-    enviarCarritoStorage();
+    enviarCarritoStorage(carrito);
 }
 
 
@@ -129,7 +130,7 @@ const eliminarBebidaCarrito = (idCarrito) => {
 
     alert('El producto fue eliminado del carrito');
 
-    enviarCarritoStorage();
+    enviarCarritoStorage(carrito);
 
 }
     
@@ -168,7 +169,7 @@ const pintarCantidad = (idBebida) => {
 
 
 
-const calcularTotal = (carrito) => {
+const calcularTotal = () => {
 
     let total = 0;
     let container = document.getElementById('total-print');
@@ -187,16 +188,9 @@ const calcularTotal = (carrito) => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    pintarBebidas();
-    if (localStorage.getItem('carrito')) {
-        const carritoStorage = obtenerCarritoStorage();
-        pintarCarrito(carritoStorage);
-        calcularTotal(carritoStorage);
-    }
-})
 
 
+export {pintarBebidas, pintarCarrito, carrito}
 
-export {carrito}
+
 

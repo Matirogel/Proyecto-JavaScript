@@ -1,8 +1,5 @@
-import { carrito } from "./codigo.js";
 
-
-
-const enviarCarritoStorage = () => {
+const enviarCarritoStorage = (carrito) => {
     localStorage.setItem('carrito', JSON.stringify(carrito));
 }
 
