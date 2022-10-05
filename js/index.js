@@ -1,4 +1,4 @@
-import { pintarCarrito, pintarBebidas, carrito } from "./codigo.js";
+import { pintarCarrito, pintarBebidas, carrito, bebidasEnCarrito, calcularTotal } from "./codigo.js";
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,5 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (localStorage.getItem('carrito')) {
         pintarCarrito(carrito);
-    }
+        calcularTotal();
+    } 
 })

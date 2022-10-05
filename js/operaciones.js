@@ -1,3 +1,3 @@
-const multiplicar = (a,b) => a * b;
+const multiplicarDosNum = (a,b) => a * b;
 
-export { multiplicar };
+export { multiplicarDosNum };
