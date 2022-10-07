@@ -52,6 +52,19 @@ const pintarBebidas = () => {
         let $botonAgregar = document.getElementById(`btn-agregar${id}`);
         $botonAgregar.addEventListener('click', () => {
             bebidasEnCarrito(id);
+            Toastify({
+                text: "Producto agregado correctamente",
+                className: "info",
+                gravity: "bottom",
+                position: "right",
+                duration: 4000,
+                style: {
+                  background: "rgb(190, 20, 20)",
+                  color: "rgb(252, 244, 244)",
+                  borderRadius: "10px"
+                
+                }
+              }).showToast();
         })
         cantidadBebida(id);    
     })
@@ -69,8 +82,14 @@ const bebidasEnCarrito = (idBebida) => {
     // Validamos para que no se repita el producto en el carrito
 
     if (productoEnCarrito) {
-        productoEnCarrito.cantidad += producto.cantidad;
-        alert('¡Has agregado este producto nuevamente!\n\nAtento a las cantidades antes de realizar la compra');
+        productoEnCarrito.cantidad = producto.cantidad;
+        
+        // alerta
+        Swal.fire({
+            title: 'Cantidad modificada',
+            text: '¡Has cambiado las cantidades de este producto!',
+            icon: 'warning'
+        })
     } else {
         carrito.push(producto);
     }
@@ -128,7 +147,11 @@ const eliminarBebidaCarrito = (indexCarrito) => {
     pintarCarrito(carrito);
     calcularTotal(carrito);
 
-    alert('El producto fue eliminado del carrito');
+    // alerta
+    Swal.fire({
+        icon: 'success',
+        text: 'El producto fue eliminado correctamente',
+      });
 
     enviarCarritoStorage(carrito);
 }
@@ -165,8 +188,6 @@ const pintarCantidad = (idBebida) => {
     const producto = BBDD.find(bebida => bebida.id === idBebida);
     const $div = document.getElementById(`cantidad${idBebida}`);
     $div.innerHTML = `<span>${producto.cantidad}</span>`;
-
-    return producto.cantidad;
 }
 
 

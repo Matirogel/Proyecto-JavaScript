@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Press+Start+2P&family=Roboto&display=swap');
+
 .backgroundPrincipal {
     background-color: #111;
 }
@@ -7,7 +9,27 @@
 }
 
 .text-white {
+    font-family: 'Montserrat', sans-serif;
     color: #ccc;
+}
+
+.text-neon-effect {
+    font-family: 'Press Start 2P', cursive;
+    animation: neonEffect 5s infinite;
+}
+
+@keyframes neonEffect {
+
+    0%, 35%, 45%, 65%, 100% {
+        text-shadow: 
+            white 0 0 12px,
+            #fd6d6d 0 0 24px,
+            #fd6d6d 0 0 36px;
+    }
+
+    40%, 60% {
+        text-shadow: none;
+    } 
 }
 
 .cardBorder {
@@ -22,6 +44,12 @@
     background-color: rgb(190, 20, 20);
     margin: 20px;
     border-radius: 10px;
+}
+
+.carrito:hover {
+    background-color: rgb(255, 0, 0);
+    color: rgb(212, 212, 212);
+    transition: 0.4s;
 }
 
 .producto-modal {
