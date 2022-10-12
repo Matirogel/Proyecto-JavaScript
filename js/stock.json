@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1, 
+        "nombre": "Fernet Branca", 
+        "precio": 1300,
+        "img": "./img/fernet-branca.png",
+        "volumen": "750ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 2, 
+        "nombre": "Gancia", 
+        "precio": 700,
+        "img": "./img/gancia.png",
+        "volumen": "1000ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 3, 
+        "nombre": "Gin Gordons", 
+        "precio": 1800,
+        "img": "./img/gin-gordons.png",
+        "volumen": "1000ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 4, 
+        "nombre": "Baileys", 
+        "precio": 3000,
+        "img": "./img/baileys.png",
+        "volumen": "890ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 5, 
+        "nombre": "Whisky Johnnie Walker Black Label", 
+        "precio": 9200,
+        "img": "./img/JW-BlackLabel.png",
+        "volumen": "1000ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 6, 
+        "nombre": "Sheridan's", 
+        "precio": 4800,
+        "img": "./img/sheridan.png",
+        "volumen": "750ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 7, 
+        "nombre": "Aperol", 
+        "precio": 1450,
+        "img": "./img/aperol.png",
+        "volumen": "750ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 8, 
+        "nombre": "Jägermeister", 
+        "precio": 7200,
+        "img": "./img/jagermeister.png",
+        "volumen": "750ml", 
+        "cantidad": 1
+    },
+    {
+        "id": 9, 
+        "nombre": "Vino tinto Marcelo Gallardo", 
+        "precio": 6200,
+        "img": "./img/vino-marcelo-gallardo.png",
+        "volumen": "750ml", 
+        "cantidad": 1
+    }
+]

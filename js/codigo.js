@@ -1,4 +1,3 @@
-import { BBDD } from "./stock.js";
 import { multiplicarDosNum } from "./operaciones.js";
 import { enviarCarritoStorage, obtenerCarritoStorage } from "./localStorage.js";
 
@@ -7,8 +6,8 @@ import { enviarCarritoStorage, obtenerCarritoStorage } from "./localStorage.js";
 let carrito = obtenerCarritoStorage() || [];
 
 
-// Funcion a ejecutar
-const pintarBebidas = () => {
+
+const pintarBebidas = (BBDD) => {
 
     const $contenedor = document.getElementById('tienda-container');
 
@@ -51,7 +50,7 @@ const pintarBebidas = () => {
 
         let $botonAgregar = document.getElementById(`btn-agregar${id}`);
         $botonAgregar.addEventListener('click', () => {
-            bebidasEnCarrito(id);
+            bebidasEnCarrito(id,BBDD);
             Toastify({
                 text: "Producto agregado correctamente",
                 className: "info",
@@ -66,13 +65,13 @@ const pintarBebidas = () => {
                 }
               }).showToast();
         })
-        cantidadBebida(id);    
+        cantidadBebida(id,BBDD);    
     })
 };
 
 
 
-const bebidasEnCarrito = (idBebida) => {
+const bebidasEnCarrito = (idBebida,BBDD) => {
 
     // Funcionalidad de carga del carrito
 
@@ -95,7 +94,6 @@ const bebidasEnCarrito = (idBebida) => {
     }
 
     pintarCarrito(carrito);   
-    calcularTotal(carrito);
     enviarCarritoStorage(carrito); 
 }
 
@@ -136,7 +134,8 @@ const pintarCarrito = (carrito) => {
 
         $container.appendChild($div);
     })
-    
+    calcularTotal(carrito);
+    finalizarCompra();
 }
 
 
@@ -145,7 +144,6 @@ const eliminarBebidaCarrito = (indexCarrito) => {
 
     carrito.splice(indexCarrito,1);
     pintarCarrito(carrito);
-    calcularTotal(carrito);
 
     // alerta
     Swal.fire({
@@ -158,7 +156,7 @@ const eliminarBebidaCarrito = (indexCarrito) => {
     
 
 
-const cantidadBebida = (idBebida) => {
+const cantidadBebida = (idBebida,BBDD) => {
 
     // Funcionalidad de la eleccion de cantidades
 
@@ -168,20 +166,20 @@ const cantidadBebida = (idBebida) => {
 
     $botonMas.addEventListener('click', () => {
         producto.cantidad++;
-        pintarCantidad(producto.id);
+        pintarCantidad(producto.id, BBDD);
     })
     
     $botonMenos.addEventListener('click', () => {
         if (producto.cantidad > 1) {
             producto.cantidad--;
-            pintarCantidad(producto.id);
+            pintarCantidad(producto.id, BBDD);
         }
     })
 }
 
 
 
-const pintarCantidad = (idBebida) => {
+const pintarCantidad = (idBebida,BBDD) => {
 
     // Renderizacion de la eleccion de cantidades en las cards
 
@@ -195,7 +193,7 @@ const pintarCantidad = (idBebida) => {
 const calcularTotal = () => {
 
     let total = 0;
-    let $container = document.getElementById('total-print');
+    let $container = document.getElementById('total-print-container');
     $container.innerHTML = '';
 
     carrito.forEach(({precio, cantidad}) => {
@@ -203,15 +201,53 @@ const calcularTotal = () => {
     })
     
     const $p = document.createElement('p');
-    $p.innerHTML = `<p><b>TOTAL:</b> $${total}</p>`;
+    $p.innerHTML = `<b>TOTAL:</b> $${total}`;
 
     $container.appendChild($p);
 }
 
 
 
+const finalizarCompra = () => {
+    
+    // Renderizado en el modal
+    let $container = document.getElementById('finalizar-container');
+    $container.innerHTML = '';
+
+    let $div = document.createElement('div');
+    
+    if (carrito.length == 0) { 
+        $div.style.display = "none"; 
+    } else {
+        $div.classList.add('d-flex', 'justify-content-center')
+    }
+
+    $div.innerHTML = `<a id="finalizar-compra" class="btn btn-danger">Finalizar compra</a>`;
+
+    $container.appendChild($div);
+
+
+    // Funcionalidad del boton
+    const $boton = document.getElementById('finalizar-compra');
+    $boton.addEventListener('click', (e) => {
+        
+        Swal.fire({
+            title: 'Confirmar compra',
+            text: '¿Seguro que quieres finalizar la compra?',
+            icon: 'question',
+            confirmButtonText: 'Aceptar',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                carrito = [];
+                pintarCarrito(carrito);   
+                enviarCarritoStorage(carrito); 
+            }
+        });
+    })
+}
+
+
 
 export {pintarBebidas, calcularTotal, pintarCarrito, carrito, bebidasEnCarrito}
-
-
-
