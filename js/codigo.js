@@ -29,14 +29,14 @@ const pintarBebidas = (BBDD) => {
                             <p class="mb-1">Volumen: <b>${volumen}</b></p>
                             <p class="mb-2">Precio: <b>$${precio}</b></p>
                         </div>
-                        <div class="d-flex flex-column justify-content-center align-items-center">
+                        <div class="m-1 d-flex flex-column justify-content-center align-items-center">
                             <button id="cantidad-mas${id}" class="btn-cantidad cantidad-shadow" type="button">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                             <div id="cantidad${id}">
                             <span>1</span>
                             </div>
-                            <button id="cantidad-menos${id}" class="btn-cantidad cantidad-shadow" type="button">
+                            <button id="cantidad-menos${id}" class="btn-cantidad cantidad-shadow m-0" type="button">
                                 <i class="fa-solid fa-minus"></i>
                             </button>
                         </div>
