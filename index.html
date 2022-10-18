@@ -14,14 +14,14 @@
     
 
     
-    <header class="d-flex justify-content-between align-items-center flex-column flex-sm-row">
-        <div class="container m-3 m-md-5">
+    <header class="backgroundPrincipal opacity sticky-sm-top d-flex justify-content-between align-items-center flex-column flex-sm-row">
+        <div class="container m-3">
             <div class="m-3 text-center text-sm-start">
                 <h1 class="text-white fs-2 text-neon-effect">OPEN DRINK STORE</h1>
             </div> 
         </div>
         <div>
-            <button class="carrito me-sm-5" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button class="carrito me-sm-5" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                 <i class="fa-solid fa-bag-shopping fa-3x p-2 p-md-3 "></i>
             </button>
         </div>
@@ -42,11 +42,11 @@
 
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Su carrito de compras</h5>
+                        <h5 class="modal-title" id="staticBackdropLabel">Su carrito de compras</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div id="modal-container" class="modal-body">

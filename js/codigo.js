@@ -10,8 +10,7 @@ let carrito = obtenerCarritoStorage() || [];
 const pintarBebidas = (BBDD) => {
 
     const $contenedor = document.getElementById('tienda-container');
-
-    $contenedor.innerHTML = '';
+    
     // Recorremos el array y pintamos cada objeto dentro
 
     BBDD.forEach(({id, img, textAlt, nombre, volumen, precio}) => {
@@ -145,11 +144,10 @@ const eliminarBebidaCarrito = (indexCarrito) => {
     carrito.splice(indexCarrito,1);
     pintarCarrito(carrito);
 
-    // alerta
     Swal.fire({
         icon: 'success',
         text: 'El producto fue eliminado correctamente',
-      });
+    });
 
     enviarCarritoStorage(carrito);
 }
